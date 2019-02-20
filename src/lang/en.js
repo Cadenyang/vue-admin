@@ -3,7 +3,7 @@ export default {
     Orders: 'Orders',
     Sell: 'Sell USDX',
     Buy: 'Buy USDX',
-    Commodity_Sale: 'commodity_sale',
+    Commodity_Sale: 'Commodity_sale',
     Rewards: 'Rewards(reward)',
     Recharge: 'Recharge',
     settings: 'settings'
@@ -38,7 +38,7 @@ export default {
     freeze: 'Freeze',
     stay: 'Stay back',
     back: 'Back',
-    timeout: 'Order timeout',
+    timeout: 'Timeout',
     cannel: 'Cannel'
   },
   setting: {

@@ -3,31 +3,31 @@
     <div class="filter-container">
       <el-form :inline="true" class="demo-form-inline">
         <el-form-item :label="$t('order.order_number')">
-          <el-input :placeholder="$t('order.order_number')"></el-input>
+          <el-input :placeholder="$t('order.order_number')" v-model="listQuery.order_number" clearable></el-input>
         </el-form-item>
         <el-form-item :label="$t('order.mobile')">
-          <el-input :placeholder="$t('order.mobile')"></el-input>
+          <el-input :placeholder="$t('order.mobile')" v-model="listQuery.mobile" clearable></el-input>
         </el-form-item>
         <el-form-item :label="$t('order.start_time')" prop="timestamp">
-          <el-date-picker  type="datetime" :placeholder="$t('order.date')"/>
+          <el-date-picker  type="datetime" :placeholder="$t('order.date')" v-model="listQuery.start_time" value-format="yyyy-MM-dd HH:mm:ss"/>
         </el-form-item>
         <el-form-item :label="$t('order.end_time')" prop="timestamp">
-          <el-date-picker type="datetime" :placeholder="$t('order.date')"/>
+          <el-date-picker type="datetime" :placeholder="$t('order.date')" v-model="listQuery.end_time" value-format="yyyy-MM-dd HH:mm:ss"/>
         </el-form-item>
         <el-form-item :label="$t('order.order_status')">
-          <el-select :placeholder="$t('order.order_status')" v-model="status">
-            <el-option :label="$t('order.all')" value="All"></el-option>
-            <el-option :label="$t('order.initial')" value="Initial"></el-option>
-            <el-option :label="$t('order.successful')" value="Successful"></el-option>
-            <el-option :label="$t('order.failure')" value="Failure"></el-option>
+          <el-select :placeholder="$t('order.order_status')" v-model="listQuery.order_status">
+            <el-option :label="$t('order.all')" value="-1"></el-option>
+            <el-option :label="$t('order.initial')" value="1"></el-option>
+            <el-option :label="$t('order.successful')" value="3"></el-option>
+            <el-option :label="$t('order.failure')" value="4"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">{{$t('order.filter')}}</el-button>
+          <el-button type="primary" @click="loadData(listQuery)">{{$t('order.filter')}}</el-button>
         </el-form-item>
       </el-form>
     </div>
-    
+
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -62,7 +62,7 @@
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" :label="$t('order.order_status')" width="110" align="center">
-        <template slot-scope="scope" >
+        <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter" >{{ scope.row.status  | statusNameFilter }}</el-tag>
         </template>
       </el-table-column>
@@ -126,10 +126,14 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: {
+        order_number: '',
+        mobile: '',
+        start_time: '',
+        end_time: '',
+        order_status: '',
         page: 1,
         pageSize: 20
       },
-      status: 'All'
     }
   },
   created() {
@@ -143,12 +147,16 @@ export default {
       }
       this.listLoading = true
       getRewardList(this.listQuery).then(response => {
-        this.list = response.data.list
-        this.total = response.data.total
+        if(response.data && response.code == '100010'){
+          this.list = response.data.list
+          this.total = response.data.total
+        }else{
+          this.list  = response.data
+          this.total  = 0
+        }
         this.listLoading = false
       })
-    },
-    onSubmit(){}
+    }
   }
 }
 </script>

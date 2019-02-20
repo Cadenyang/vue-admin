@@ -151,7 +151,6 @@ export default {
       this.listQuery.page = val
       this.loadData()
     },
-    onSubmit(){}
   }
 }
 </script>

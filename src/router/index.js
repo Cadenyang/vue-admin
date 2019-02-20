@@ -84,7 +84,7 @@ export const constantRouterMap = [
         path: 'setting',
         component: () => import('@/views/setting/index'),
         name: 'setting',
-        meta: { title: 'settings', icon: 'setting' }
+        meta: { title: 'Settings', icon: 'setting' }
       }
     ]
   }
