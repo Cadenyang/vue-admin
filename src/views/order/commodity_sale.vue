@@ -8,11 +8,23 @@
         <el-form-item :label="$t('order.mobile')">
           <el-input :placeholder="$t('order.mobile')" v-model="listQuery.mobile" clearable></el-input>
         </el-form-item>
-        <el-form-item :label="$t('order.start_time')" prop="timestamp">
-          <el-date-picker  type="datetime" :placeholder="$t('order.date')" v-model="listQuery.start_time" value-format="yyyy-MM-dd HH:mm:ss"/>
+        <el-form-item :label="$t('order.start')" prop="timestamp">
+          <el-col :span="10">
+              <el-date-picker type="datetime" :placeholder="$t('order.date')"  v-model="listQuery.create_start_time" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          </el-col>
+          <el-col class="line" :span="1" style="margin-left:30px;margin-right:-10px">-</el-col>
+          <el-col :span="10">
+              <el-date-picker type="datetime" :placeholder="$t('order.date')" v-model="listQuery.create_end_time" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          </el-col>
         </el-form-item>
         <el-form-item :label="$t('order.end_time')" prop="timestamp">
-          <el-date-picker type="datetime" :placeholder="$t('order.date')" v-model="listQuery.end_time" value-format="yyyy-MM-dd HH:mm:ss"/>
+          <el-col :span="10">
+              <el-date-picker type="datetime" :placeholder="$t('order.date')"  v-model="listQuery.finish_start_time" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          </el-col>
+          <el-col class="line" :span="1" style="margin-left:30px;margin-right:-10px">-</el-col>
+          <el-col :span="10">
+              <el-date-picker type="datetime" :placeholder="$t('order.date')" v-model="listQuery.finish_end_time" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          </el-col>
         </el-form-item>
         <el-form-item :label="$t('order.order_status')">
           <el-select :placeholder="$t('order.order_status')" v-model="listQuery.order_status">
@@ -23,7 +35,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="loadData(listQuery)">{{$t('order.filter')}}</el-button>
+          <el-button type="primary" @click="loadData">{{$t('order.filter')}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -128,8 +140,10 @@ export default {
       listQuery: {
         order_number: '',
         mobile: '',
-        start_time: '',
-        end_time: '',
+        create_start_time: '',
+        create_end_time: '',
+        finish_start_time: '',
+        finish_end_time: '',
         order_status: '',
         page: 1,
         pageSize: 20
@@ -141,9 +155,11 @@ export default {
     this.loadData()
   },
   methods: {
-    loadData(val) {
-      if (val) {
-        this.listQuery = val
+    loadData() {
+      for (let item in this.listQuery) {
+        if (this.listQuery[item] === null){
+          this.listQuery[item] = ''
+        }
       }
       this.listLoading = true
       getPayList(this.listQuery).then(response => {

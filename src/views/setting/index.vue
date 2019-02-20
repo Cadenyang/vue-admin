@@ -144,12 +144,12 @@ export default {
     },
     onCopy: function (e) {
       this.$message({
-        message: _this.$t('setting.success'),
+        message: _this.$t('setting.copy_success'),
         type: 'success'
       });
     },
     onError: function (e) {
-      this.$message.error(_this.$t('setting.error'));
+      this.$message.error(_this.$t('setting.copy_error'));
     },
     sendMsg() {
       if (!this.msgColdDown) {

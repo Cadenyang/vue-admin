@@ -4,7 +4,7 @@ export default {
     Sell: 'Sell USDX',
     Buy: 'Buy USDX',
     Commodity_Sale: 'Commodity_sale',
-    Rewards: 'Rewards(reward)',
+    Rewards: 'Rewards',
     Recharge: 'Recharge',
     settings: 'settings'
   },
@@ -30,8 +30,9 @@ export default {
     phone_number: 'Phone Number',
     amount: 'Amount(USDX)',
     price: 'Price(USDX)',
-    start_time: 'Create Time',
-    end_time: 'End Time',
+    start: 'Creation time',
+    end_time: 'End time',
+    start_time: 'Start time',
     filter: 'Filter',
     date: 'Please pick a date',
     recharge: 'To be charge',
@@ -53,6 +54,8 @@ export default {
     copy: 'Copy',
     switch: 'Interface switch',
     success: 'successful',
-    error: 'error'
+    error: 'error',
+    copy_success: 'Copy successful',
+    copy_error: 'Copy error'
   }
 }

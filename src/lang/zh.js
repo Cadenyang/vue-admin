@@ -6,7 +6,7 @@ export default {
     Commodity_Sale: '商品出售',
     Rewards: '奖励发放',
     Recharge: '充值',
-    settings: '配置'
+    Settings: '配置'
   },
   tagsView: {
     refresh: '刷新',
@@ -30,10 +30,11 @@ export default {
     phone_number: '手机号码',
     amount: '数量(USDX)',
     price: '总价(USDX)',
-    start_time: '创建时间',
-    end_time: '结束时间',
+    start_time: '订单开始时间',
+    end_time: '订单结束时间',
+    start: '订单创建时间',
     filter: '查询',
-    date: '选择时间',
+    date: '请选择时间',
     recharge: '待划账',
     freeze: '冻结',
     stay: '待退回',
@@ -53,6 +54,8 @@ export default {
     copy: '复制',
     switch: '接口开关',
     success: '成功',
-    error: '失败'
+    error: '失败',
+    copy_success: '复制成功',
+    copy_error: '复制失败'
   }
 }
