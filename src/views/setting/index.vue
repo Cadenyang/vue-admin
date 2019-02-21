@@ -225,9 +225,9 @@ export default {
     cursor: pointer;
     user-select: none;
   }
-  .sell-buy {
-    margin-left: 50px;
-  }
+.sell-buy {
+  margin-left: 50px;
+}
 </style>
 
 

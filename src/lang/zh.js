@@ -40,7 +40,12 @@ export default {
     stay: '待退回',
     back: '退回',
     timeout: '订单超时',
-    cannel: '订单取消'
+    cannel: '订单取消',
+    code: '区号',
+    china: '大陆',
+    hk: '香港',
+    macau: '澳门',
+    taiwan: '台湾'
   },
   setting: {
     login_pwd: '商户登录密码设置',

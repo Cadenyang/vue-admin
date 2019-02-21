@@ -19,7 +19,7 @@ export default {
     logOut: 'Log Out'
   },
   order: {
-    order_number: 'Order nember',
+    order_number: 'Order number',
     mobile: 'Mobile',
     order_status: 'Order status',
     all: 'All',
@@ -40,7 +40,13 @@ export default {
     stay: 'Stay back',
     back: 'Back',
     timeout: 'Timeout',
-    cannel: 'Cannel'
+    cannel: 'Cannel',
+    code: 'Code',
+    china: 'China',
+    hk: 'HK',
+    macau: 'Macau',
+    taiwan: 'Taiwan'
+
   },
   setting: {
     login_pwd: 'Merchant Login Password Setting',
