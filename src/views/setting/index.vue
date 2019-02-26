@@ -80,6 +80,7 @@ import api from '@/api/user'
 
 var _this = null
 export default {
+  name: 'setting',
   data(){
     return {
       switchs: {

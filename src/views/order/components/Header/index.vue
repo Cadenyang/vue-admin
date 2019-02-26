@@ -15,7 +15,7 @@
               <el-col :span="10">
                   <el-date-picker type="datetime" :placeholder="$t('order.date')" v-model="listQuery.create_end_time" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
               </el-col>
-            </el-form-item>
+            </el-form-item>  
             <el-form-item :label="$t('order.order_status')">
               <el-radio-group v-model="listQuery.order_status">
                 <el-radio-button :label="-1">{{ $t('order.all') }}</el-radio-button>

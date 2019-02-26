@@ -6,7 +6,9 @@ export default {
     Commodity_Sale: 'Commodity_sale',
     Rewards: 'Rewards',
     Recharge: 'Recharge',
-    settings: 'settings'
+    settings: 'settings',
+    assets: 'Assets',
+    transactions: 'Transactions'
   },
   tagsView: {
     refresh: 'Refresh',
@@ -63,5 +65,28 @@ export default {
     error: 'error',
     copy_success: 'Copy successful',
     copy_error: 'Copy error'
+  },
+  assets: {
+    assets_total: 'Assets',
+    available: 'Available',
+    frozen: 'Frozen',
+    all_types: 'All Types',
+    sell_usdx: 'Sell USDX',
+    buy_usdx: 'Buy USDX',
+    commodity_sale: 'Commodity Sale',
+    rewards: 'Rewards',
+    time: 'Time',
+    type: 'Type',
+    amount: 'Amount (USDX)',
+    balance: 'Balance',
+    issue: 'Issue rewards',
+    recharge: 'Recharge',
+    pay: 'Pay',
+    accounting: 'Accounting',
+    refund: 'Refund',
+    transfer_out: 'Transfer out',
+    transfer_in: 'Transfer in',
+    end_time: 'End time',
+    start_time: 'Start time'
   }
 }

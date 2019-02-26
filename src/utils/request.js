@@ -18,7 +18,6 @@ const jsonToFormdata = function(oldData) {
   }
   return newStr.slice(0, -1)
 }
-
 // request拦截器
 service.interceptors.request.use(
   config => {

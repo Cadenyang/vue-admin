@@ -19,6 +19,7 @@ import '@/permission' // permission control
 import VueClipboard from '../node_modules/vue-clipboard2'
 
 Vue.use(VueClipboard)
+Vue.prototype.$codeURL = 'http://merchant.topockettest.com'
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size

@@ -6,7 +6,9 @@ export default {
     Commodity_Sale: '商品出售',
     Rewards: '奖励发放',
     Recharge: '充值',
-    Settings: '配置'
+    Settings: '配置',
+    Assets: '资产与统计',
+    Transactions: '资产流水'
   },
   tagsView: {
     refresh: '刷新',
@@ -62,5 +64,28 @@ export default {
     error: '失败',
     copy_success: '复制成功',
     copy_error: '复制失败'
+  },
+  assets: {
+    assets_total: '资产',
+    available: '可用',
+    frozen: '冻结',
+    all_types: '所有类型',
+    sell_usdx: '买入USDX',
+    buy_usdx: '卖出USDX',
+    commodity_sale: '商品出售',
+    rewards: '奖励',
+    time: '时间',
+    type: '类型',
+    amount: '数量 (USDX)',
+    balance: '余额',
+    issue: '奖励',
+    recharge: '充值',
+    pay: '支付',
+    accounting: '支付入账',
+    refund: '退回',
+    transfer_out: '转出',
+    transfer_in: '转入',
+    end_time: '结束时间',
+    start_time: '开始时间'
   }
 }

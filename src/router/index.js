@@ -26,20 +26,24 @@ export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
 
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   redirect: '/dashboard',
-  //   name: 'Dashboard',
-  //   hidden: true,
-  //   children: [{
-  //     path: 'dashboard',
-  //     component: () => import('@/views/dashboard/index')
-  //   }]
-  // },
-
   {
     path: '',
+    component: Layout,
+    name: 'Assets',
+    alwaysShow: true,
+    meta: { title: 'Assets', icon: 'assets' },
+    children: [
+      {
+        path: '/transactions',
+        component: () => import('@/views/assets/index'),
+        name: 'Transactions',
+        meta: { title: 'Transactions', icon: 'transactions' }
+      }
+    ]
+  },
+
+  {
+    path: '/orders',
     component: Layout,
     name: 'Orders',
     meta: { title: 'Orders', icon: 'order', affix: true },
@@ -77,7 +81,7 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/',
+    path: '/setting',
     component: Layout,
     children: [
       {
