@@ -58,12 +58,12 @@
           </div>
           <div class="config-item" >
               <el-form ref="switchs" :model="switchs" width="80px" style="margin-top:20px;margin-left:20px">
-                <el-form-item :label="$t('route.Sell')">
+                <!-- <el-form-item :label="$t('route.Sell')">
                   <el-switch class="sell-buy" v-model="switchs.sell"></el-switch>
                 </el-form-item>
                 <el-form-item :label="$t('route.Buy')">
                   <el-switch class="sell-buy" v-model="switchs.buy"></el-switch>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item :label="$t('route.Commodity_Sale')">
                   <el-switch  v-if="language==='zh-CN'" style="margin-left:60px" v-model="switchs.sale"></el-switch>
                   <el-switch  v-if="language==='en-US'" style="margin-left:12px" v-model="switchs.sale"></el-switch>
@@ -80,6 +80,7 @@ import api from '@/api/user'
 
 var _this = null
 export default {
+  name: 'setting',
   data(){
     return {
       switchs: {
@@ -144,12 +145,12 @@ export default {
     },
     onCopy: function (e) {
       this.$message({
-        message: _this.$t('setting.success'),
+        message: _this.$t('setting.copy_success'),
         type: 'success'
       });
     },
     onError: function (e) {
-      this.$message.error(_this.$t('setting.error'));
+      this.$message.error(_this.$t('setting.copy_error'));
     },
     sendMsg() {
       if (!this.msgColdDown) {
@@ -208,6 +209,7 @@ export default {
   padding: 30px;
 }
 .title {
+  width: 100%;
   text-align: left;
   border-bottom: 1px solid #ebeef5;
   padding: 0 0 10px 10px;
@@ -225,9 +227,9 @@ export default {
     cursor: pointer;
     user-select: none;
   }
-  .sell-buy {
-    margin-left: 50px;
-  }
+.sell-buy {
+  margin-left: 50px;
+}
 </style>
 
 

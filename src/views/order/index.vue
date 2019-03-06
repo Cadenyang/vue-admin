@@ -1,33 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
-      <el-form :inline="true" class="demo-form-inline">
-        <el-form-item :label="$t('order.order_number')">
-          <el-input :placeholder="$t('order.order_number')"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('order.mobile')">
-          <el-input :placeholder="$t('order.mobile')"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('order.start_time')" prop="timestamp">
-          <el-date-picker  type="datetime" :placeholder="$t('order.date')"/>
-        </el-form-item>
-        <el-form-item :label="$t('order.end_time')" prop="timestamp">
-          <el-date-picker type="datetime" :placeholder="$t('order.date')"/>
-        </el-form-item>
-        <el-form-item :label="$t('order.order_status')">
-          <el-select :placeholder="$t('order.order_status')" v-model="status">
-            <el-option :label="$t('order.all')" value="All"></el-option>
-            <el-option :label="$t('order.initial')" value="Initial"></el-option>
-            <el-option :label="$t('order.successful')" value="Successful"></el-option>
-            <el-option :label="$t('order.failure')" value="Failure"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">{{$t('order.filter')}}</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-    
+    <query-header :listQuery="listQuery" @loadData="loadData" />
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -72,24 +45,24 @@
         </template>Interest date
       </el-table-column>
       <el-table-column :label="$t('order.end_time')" align="center">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.status != 1 && scope.row.status != 2 && scope.row.status != 6 ">
           {{ scope.row.utime }}
         </template>
       </el-table-column>    
     </el-table>
-
-    <pagination v-show="total>0" :total="total" :page="listQuery.page" :pageSize="listQuery.pageSize" @pagination="loadData" />
-
+    <pagination v-show="total>0" :total="total" :page="listQuery.page" :limit="listQuery.pageSize" @pagination="changePagation" style="text-align:center" />
   </div>
 </template>
 
 <script>
+import queryHeader from './components/Header'
 import { getRechargeList } from '@/api/order'
 import Pagination from '@/components/Pagination'
 
 var _this = null;
 export default {
-  components: { Pagination },
+  name: 'Sell',
+  components: { Pagination, queryHeader },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -97,9 +70,9 @@ export default {
         2: 'primary',
         3: 'success',
         4: 'danger',
-        5: 'info',
-        6: 'warning',
-        7: 'primary',
+        5: 'danger',
+        6: 'danger',
+        7: 'danger',
         8: 'danger',
         9: 'danger',
       }
@@ -108,14 +81,14 @@ export default {
     statusNameFilter(status) {
       const statusNameMap = {
         1: _this.$t('order.initial'),
-        2: _this.$t('order.recharge'),
+        2: _this.$t('order.initial'),
         3: _this.$t('order.successful'),
         4: _this.$t('order.failure'),
-        5: _this.$t('order.freeze'),
-        6: _this.$t('order.stay'),
-        7: _this.$t('order.back'),
-        8: _this.$t('order.timeout'),
-        9: _this.$t('order.cannel'),
+        5: _this.$t('order.failure'),
+        6: _this.$t('order.failure'),
+        7: _this.$t('order.failure'),
+        8: _this.$t('order.failure'),
+        9: _this.$t('order.failure'),
       }
       return statusNameMap[status]
     }
@@ -126,10 +99,17 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: {
+        order_number: '',
+        areaCode: '86',
+        mobile: '',
+        create_start_time: '',
+        create_end_time: '',
+        finish_start_time: '',
+        finish_end_time: '',
+        order_status: '-1',
         page: 1,
         pageSize: 20
-      },
-      status: 'All'
+      }
     }
   },
   created() {
@@ -137,18 +117,55 @@ export default {
     this.loadData()
   },
   methods: {
-    loadData(val) {
-      if (val) {
-        this.listQuery = val
-      }
+    loadData() {
       this.listLoading = true
+      for (let item in this.listQuery) {
+        if (this.listQuery[item] === null){
+          this.listQuery[item] = ''
+        }
+      }
       getRechargeList(this.listQuery).then(response => {
-        this.list = response.data.list
-        this.total = response.data.total
+        if(response.data && response.code == '100010'){
+          this.list = response.data.list
+          this.total = response.data.total
+        }else{
+          this.list  = response.data
+          this.total  = 0
+        }
         this.listLoading = false
       })
     },
-    onSubmit(){}
-  }
+    changePagation(page, pageSize) {
+      this.listQuery.page = page
+      this.listQuery.pageSize = pageSize
+      this.loadData()
+    }
+  } 
 }
 </script>
+<style>
+  .app-container {
+    padding: 10px;
+  }
+  .box {
+    min-width: 1260px;
+  }
+  .el-code {
+    width: 100px;
+  }
+  .input-with-select .el-input-group__prepend {
+    background-color: #fff;
+  }
+  .input-width {
+    width: 453px;
+  }
+  .box-card {
+    border:none;
+  }
+  .el-card.is-always-shadow {
+    -webkit-box-shadow: 0 0 5px rgba(255, 255, 255, 1);
+  }
+  .sell-buy {
+    margin-left: 50px;
+  }
+</style>

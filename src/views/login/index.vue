@@ -23,6 +23,18 @@
           <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
+      <!-- <el-form-item prop="code">
+        <div class="code">
+          <div style="width: 75%">
+            <span class="svg-container">
+              <svg-icon icon-class="code" />
+            </span>
+            <el-input v-model="loginForm.code" name="code" maxlength="11" auto-complete="on" placeholder="Verification code" >
+            </el-input>
+          </div>
+          <img :src="codeUrl" @click="refreshCode" />
+        </div>
+      </el-form-item> -->
       <el-form-item>
         <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
           Login
@@ -33,12 +45,14 @@
 </template>
 
 <script>
+import codeAuth from '~/config/code'  //加载语言配置文件
+
 export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
       if (value.length < 8) {
-        callback(new Error('Please enter correct username！'))
+        callback(new Error('Please enter correct username'))
       } else {
         callback()
       }
@@ -50,18 +64,28 @@ export default {
         callback()
       }
     }
+    const validateCode = (rule, value, callback) => {
+      if (value.length == '') {
+        callback(new Error('Password enter verification code'))
+      } else {
+        callback()
+      }
+    }
     return {
       loginForm: {
         username: '',
         password: ''
+        //code: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePass }]
+        //code: [{ required: true, trigger: 'blur', validator: validateCode }]
       },
       loading: false,
       pwdType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      rerefresh: false
     }
   },
   watch: {
@@ -70,6 +94,14 @@ export default {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
+    }
+  },
+  computed: {
+    codeUrl() {
+      if (this.rerefresh) {
+        return ''
+      }
+      return this.$codeURL + '/user/login/image'
     }
   },
   methods: {
@@ -95,7 +127,13 @@ export default {
           return false
         }
       })
-    }
+    },
+    refreshCode(){
+      this.rerefresh = true
+      setTimeout(() => {
+        this.rerefresh = false
+      }, 50)
+    },
   }
 }
 </script>
@@ -109,7 +147,7 @@ $light_gray:#eee;
   .el-input {
     display: inline-block;
     height: 47px;
-    width: 85%;
+    width: 75%;
     input {
       background: transparent;
       border: 0px;
@@ -132,6 +170,18 @@ $light_gray:#eee;
   }
 }
 
+.code {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  img {
+    height: 45px;
+    margin-right: 10px;
+    border-radius: 5px;
+  }
+}
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>

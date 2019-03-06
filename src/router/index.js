@@ -26,36 +26,40 @@ export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
 
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   redirect: '/dashboard',
-  //   name: 'Dashboard',
-  //   hidden: true,
-  //   children: [{
-  //     path: 'dashboard',
-  //     component: () => import('@/views/dashboard/index')
-  //   }]
-  // },
-
   {
     path: '',
+    component: Layout,
+    name: 'Assets',
+    alwaysShow: true,
+    meta: { title: 'Assets', icon: 'assets' },
+    children: [
+      {
+        path: '/transactions',
+        component: () => import('@/views/assets/index'),
+        name: 'Transactions',
+        meta: { title: 'Transactions', icon: 'transactions' }
+      }
+    ]
+  },
+
+  {
+    path: '/orders',
     component: Layout,
     name: 'Orders',
     meta: { title: 'Orders', icon: 'order', affix: true },
     children: [
-      {
-        path: '/sell',
-        component: () => import('@/views/order/index'),
-        name: 'Sell',
-        meta: { title: 'Sell', icon: 'sell' }
-      },
-      {
-        path: '/buy',
-        component: () => import('@/views/order/buy'),
-        name: 'Buy',
-        meta: { title: 'Buy', icon: 'buy' }
-      },
+      // {
+      //   path: '/sell',
+      //   component: () => import('@/views/order/index'),
+      //   name: 'Sell',
+      //   meta: { title: 'Sell', icon: 'sell' }
+      // },
+      // {
+      //   path: '/buy',
+      //   component: () => import('@/views/order/buy'),
+      //   name: 'Buy',
+      //   meta: { title: 'Buy', icon: 'buy' }
+      // },
       {
         path: '/commodity_sale',
         component: () => import('@/views/order/commodity_sale'),
@@ -65,7 +69,7 @@ export const constantRouterMap = [
       {
         path: '/rewards',
         component: () => import('@/views/order/rewards'),
-        name: 'Rewards  ',
+        name: 'Rewards',
         meta: { title: 'Rewards', icon: 'rewards' }
       }
       // {
@@ -77,14 +81,14 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/',
+    path: '/setting',
     component: Layout,
     children: [
       {
         path: 'setting',
         component: () => import('@/views/setting/index'),
         name: 'setting',
-        meta: { title: 'settings', icon: 'setting' }
+        meta: { title: 'Settings', icon: 'setting' }
       }
     ]
   }
