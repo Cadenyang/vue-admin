@@ -24,12 +24,17 @@
           <span>{{ scope.row.phone }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('order.amount')" align="center">
+      <el-table-column :label="$t('order.commodity')" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.product_name }}
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('order.price')" align="center">
         <template slot-scope="scope">
           {{ scope.row.coin_amount }}
         </template>
       </el-table-column>
-      <el-table-column :label="$t('order.price')" align="center">
+      <el-table-column :label="$t('order.amount')" align="center">
         <template slot-scope="scope">
           {{ scope.row.coin_amount }}
         </template>
@@ -39,7 +44,7 @@
           <el-tag :type="scope.row.status | statusFilter" >{{ scope.row.status  | statusNameFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('order.start_time')" align="center">
+      <el-table-column :label="$t('order.start')" align="center">
         <template slot-scope="scope">
           {{ scope.row.ctime }}
         </template>Interest date
@@ -61,7 +66,7 @@ import Pagination from '@/components/Pagination'
 
 var _this = null;
 export default {
-  name: 'Commodity_sale',
+  name: 'Commodity_Sale',
   components: { Pagination, queryHeader },
   filters: {
     statusFilter(status) {
@@ -106,7 +111,7 @@ export default {
         create_end_time: '',
         finish_start_time: '',
         finish_end_time: '',
-        order_status: '',
+        order_status: '-1',
         page: 1,
         pageSize: 20
       }

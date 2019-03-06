@@ -48,18 +48,18 @@ export const constantRouterMap = [
     name: 'Orders',
     meta: { title: 'Orders', icon: 'order', affix: true },
     children: [
-      {
-        path: '/sell',
-        component: () => import('@/views/order/index'),
-        name: 'Sell',
-        meta: { title: 'Sell', icon: 'sell' }
-      },
-      {
-        path: '/buy',
-        component: () => import('@/views/order/buy'),
-        name: 'Buy',
-        meta: { title: 'Buy', icon: 'buy' }
-      },
+      // {
+      //   path: '/sell',
+      //   component: () => import('@/views/order/index'),
+      //   name: 'Sell',
+      //   meta: { title: 'Sell', icon: 'sell' }
+      // },
+      // {
+      //   path: '/buy',
+      //   component: () => import('@/views/order/buy'),
+      //   name: 'Buy',
+      //   meta: { title: 'Buy', icon: 'buy' }
+      // },
       {
         path: '/commodity_sale',
         component: () => import('@/views/order/commodity_sale'),

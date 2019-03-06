@@ -106,7 +106,7 @@ export default {
         create_end_time: '',
         finish_start_time: '',
         finish_end_time: '',
-        order_status: '',
+        order_status: '-1',
         page: 1,
         pageSize: 20
       }

@@ -74,13 +74,13 @@ export default {
     return {
       loginForm: {
         username: '',
-        password: '',
-        code: ''
+        password: ''
+        //code: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }],
-        code: [{ required: true, trigger: 'blur', validator: validateCode }]
+        password: [{ required: true, trigger: 'blur', validator: validatePass }]
+        //code: [{ required: true, trigger: 'blur', validator: validateCode }]
       },
       loading: false,
       pwdType: 'password',

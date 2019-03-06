@@ -8,9 +8,52 @@
       border
       fit
       highlight-current-row>
+
+      <el-table-column type="expand" style="background-color:#eee">
+        <template slot-scope="scope">
+          <el-table :data="scope.row.sub_list">
+            <el-table-column :label="$t('order.reward_id')" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.reward_id }}
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('order.out_order_num')" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.out_order_num }}
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('order.phone')" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.phone }}
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('order.receive_type')" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.receive_type | receiveType}}
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('order.coin_amount')" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.coin_amount }}
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('order.reward_status')" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.reward_status | rewardStatus }}
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('order.create_time')" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.create_time }}
+              </template>
+            </el-table-column>
+          </el-table>
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" :label="$t('order.id')" width="95">
         <template slot-scope="scope">
-          {{ scope.row.id }}
+          {{ scope.row.transaction_order_id }}
         </template>
       </el-table-column>
       <el-table-column :label="$t('order.order_number')" align="center">
@@ -18,22 +61,24 @@
           {{ scope.row.order_num }}
         </template>
       </el-table-column>
-      <el-table-column :label="$t('order.phone_number')" align="center">
+      <!-- <el-table-column :label="$t('order.phone_number')" align="center">
         <template slot-scope="scope">
           <span v-if="scope.row.area_code">{{ scope.row.area_code }}-</span>
           <span>{{ scope.row.phone }}</span>
         </template>
+      </el-table-column> -->
+      <el-table-column :label="$t('order.tag')" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.tag }}
+        </template>
       </el-table-column>
+
       <el-table-column :label="$t('order.amount')" align="center">
         <template slot-scope="scope">
           {{ scope.row.coin_amount }}
         </template>
       </el-table-column>
-      <el-table-column :label="$t('order.price')" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.coin_amount }}
-        </template>
-      </el-table-column>
+      
       <el-table-column class-name="status-col" :label="$t('order.order_status')" width="110" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter" >{{ scope.row.status  | statusNameFilter }}</el-tag>
@@ -42,7 +87,7 @@
       <el-table-column :label="$t('order.start_time')" align="center">
         <template slot-scope="scope">
           {{ scope.row.ctime }}
-        </template>Interest date
+        </template>
       </el-table-column>
       <el-table-column :label="$t('order.end_time')" align="center">
         <template slot-scope="scope" v-if="scope.row.status != 1 && scope.row.status != 2 && scope.row.status != 6 ">
@@ -78,6 +123,7 @@ export default {
       }
       return statusMap[status]
     },
+    //1:初始化 2:已确认 3:确认失败 4:取消 5:超时
     statusNameFilter(status) {
       const statusNameMap = {
         1: _this.$t('order.initial'),
@@ -91,7 +137,25 @@ export default {
         9: _this.$t('order.failure'),
       }
       return statusNameMap[status]
+    },
+    receiveType(status) {
+      const accountType = {
+        1: _this.$t('order.receive_account'),
+        2: _this.$t('order.account'),
+      }
+      return accountType[status]
+    },
+    rewardStatus(status) {
+      const rewards = {
+        1: _this.$t('order.initial'),
+        2: _this.$t('order.confirm'),
+        3: _this.$t('order.confirm_error'),
+        4: _this.$t('order.error'),
+        5: _this.$t('order.time_out')
+      }
+      return rewards[status]
     }
+
   },
   data() {
     return {
@@ -106,7 +170,7 @@ export default {
         create_end_time: '',
         finish_start_time: '',
         finish_end_time: '',
-        order_status: '',
+        order_status: '-1',
         page: 1,
         pageSize: 20
       }

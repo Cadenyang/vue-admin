@@ -13,7 +13,7 @@
               </el-col>
               <el-col class="line" :span="1" style="margin-left:30px;margin-right:-10px;">-</el-col>
               <el-col :span="10">
-                  <el-date-picker type="datetime" :placeholder="$t('order.date')" v-model="listQuery.create_end_time" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                  <el-date-picker type="datetime" :placeholder="$t('order.date')" v-model="listQuery.create_end_time" value-format="yyyy-MM-dd HH:mm:ss" :picker-options="limitPicker"></el-date-picker>
               </el-col>
             </el-form-item>  
             <el-form-item :label="$t('order.order_status')">
@@ -42,7 +42,7 @@
                 </el-col>
                 <el-col class="line" :span="1" style="margin-left:30px;margin-right:-10px;">-</el-col>
                 <el-col :span="10">
-                    <el-date-picker type="datetime" :placeholder="$t('order.date')" v-model="listQuery.finish_end_time" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                    <el-date-picker type="datetime" :placeholder="$t('order.date')" v-model="listQuery.finish_end_time" value-format="yyyy-MM-dd HH:mm:ss" :picker-options="limitPicker"></el-date-picker>
                 </el-col>
               </el-form-item>  
               <br /> 
@@ -73,7 +73,12 @@ export default {
   },
   data() {
     return {
-      options: codeSlect.code
+      options: codeSlect.code,
+      limitPicker: {
+        disabledDate(time) {
+          return time.getTime() > Date.now();
+        }
+      }
     }
   },
   methods: {

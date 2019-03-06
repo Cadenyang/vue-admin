@@ -26,7 +26,7 @@
         </el-col>
         <el-col class="line" :span="1" style="margin-left:30px;margin-right:-10px;">-</el-col>
         <el-col :span="10">
-            <el-date-picker type="datetime" :placeholder="$t('order.end_time')" v-model="listQuery.end_time" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            <el-date-picker type="datetime" :placeholder="$t('order.end_time')" v-model="listQuery.end_time" value-format="yyyy-MM-dd HH:mm:ss" :picker-options="limitPicker"></el-date-picker>
         </el-col>
       </el-form-item> 
     <el-button type="primary" style="margin-left:50px;"  @click="loadData" >{{$t('order.filter')}}</el-button>
@@ -34,11 +34,11 @@
   </div>
   <div class="assets-container" style="width:50%;margin-top:-20px" >
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane :label="$t('assets.all_types')" name=""></el-tab-pane>
-      <el-tab-pane :label="$t('assets.sell_usdx')" name="Recharge"></el-tab-pane>
-      <el-tab-pane :label="$t('assets.buy_usdx')" name="Pay"></el-tab-pane>
-      <el-tab-pane :label="$t('assets.commodity_sale')" name="Pay"></el-tab-pane>
-      <el-tab-pane :label="$t('assets.rewards')" name="Issue rewards"></el-tab-pane>
+      <el-tab-pane :label="$t('assets.all_types')" name="Accounting&&Issue rewards&&Refund"></el-tab-pane>
+      <!-- <el-tab-pane :label="$t('assets.sell_usdx')" name="Recharge"></el-tab-pane>
+      <el-tab-pane :label="$t('assets.buy_usdx')" name="Null"></el-tab-pane> -->
+      <el-tab-pane :label="$t('assets.commodity_sale')" name="Accounting"></el-tab-pane>
+      <el-tab-pane :label="$t('assets.rewards')" name="Issue rewards&&Refund"></el-tab-pane>
     </el-tabs>
     <el-table
       v-loading="listLoading"
@@ -79,14 +79,16 @@ import Pagination from '@/components/Pagination'
 
 var _this = null;
 export default {
-  name: 'assets',
+  name: 'Transactions',
   components: { Pagination },
   filters: {
     typeFilter(status) {
       const typeFilter = {
         'Issue rewards': _this.$t('assets.issue'),
         'Recharge': _this.$t('assets.recharge'),
+        'RECHARGE': _this.$t('assets.recharge'),
         'Pay': _this.$t('assets.pay'),
+        'PAY': _this.$t('assets.pay'),
         'Accounting': _this.$t('assets.accounting'),
         'Refund': _this.$t('assets.refund'),
         'Transfer out': _this.$t('assets.transfer_out'),
@@ -107,13 +109,18 @@ export default {
       available: '',
       freezeAssets: '',
       listLoading: false,
-      activeName: '',
+      activeName: 'Accounting&&Issue rewards&&Refund',
       listQuery: {
-        type: '',
+        type: 'Accounting&&Issue rewards&&Refund',
         page: 1,
         pageSize: 20,
         start_time: '',
         end_time: ''
+      },
+      limitPicker: {
+        disabledDate(time) {
+          return time.getTime() > Date.now();
+        }
       }
     }
   },
@@ -138,6 +145,7 @@ export default {
         this.listLoading = false
       }),
       api.getWaterList(this.listQuery).then(response => {
+        console.log(response)
         if(response.data && response.success == true){
           this.list = response.data.list
           this.total = response.data.total
@@ -146,6 +154,7 @@ export default {
       })
     },
     handleClick() {
+      this.listQuery.page = 1
       this.listQuery.type = this.activeName
       this.loadData()
     },
@@ -191,7 +200,7 @@ export default {
 }
 .el-tabs__item {
   text-align: center;
-  width: 150px;
+  width: 240px;
   height: 55px;
   line-height: 55px
 }
