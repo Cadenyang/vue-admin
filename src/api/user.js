@@ -20,5 +20,13 @@ export default {
       method: 'post',
       data
     })
+  },
+  // 短信验证查看APPID和签名
+  matchPhoneAuthCode (data) {
+    return request({
+      url: '/user/password/looking_appsecrect',
+      method: 'post',
+      data
+    })
   }
 }

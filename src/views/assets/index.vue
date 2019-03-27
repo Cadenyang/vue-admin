@@ -48,7 +48,7 @@
       highlight-current-row>
       <el-table-column :label="$t('assets.time')" align="center">
         <template slot-scope="scope">
-          {{ scope.row.creatTime | timeFormat }}
+          {{ scope.row.creatTime | timeZone }}
         </template>
       </el-table-column>
       <el-table-column :label="$t('assets.type')" align="center">
@@ -95,11 +95,11 @@ export default {
         'Transfer in': _this.$t('assets.transfer_in'),
       }
       return typeFilter[status]
-    },
-    timeFormat(unixtime) {
-      let unixTimestamp = new Date(unixtime)
-      return unixTimestamp.toLocaleDateString().replace(/\//g, "-") + " " + unixTimestamp.toTimeString().substr(0, 8)
     }
+    // timeFormat(unixtime) {
+    //   let unixTimestamp = new Date(unixtime)
+    //   return unixTimestamp.toLocaleDateString().replace(/\//g, "-") + " " + unixTimestamp.toTimeString().substr(0, 8)
+    // }
   },  
   data() {
     return {

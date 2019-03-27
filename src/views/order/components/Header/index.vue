@@ -18,7 +18,7 @@
             </el-form-item>  
             <el-form-item :label="$t('order.order_status')">
               <el-radio-group v-model="listQuery.order_status">
-                <el-radio-button :label="-1">{{ $t('order.all') }}</el-radio-button>
+                <el-radio-button :label="''">{{ $t('order.all') }}</el-radio-button>
                 <el-radio-button :label="1">{{ $t('order.initial') }}</el-radio-button>
                 <el-radio-button :label="3">{{ $t('order.successful') }}</el-radio-button>
                 <el-radio-button :label="4">{{ $t('order.failure') }}</el-radio-button>

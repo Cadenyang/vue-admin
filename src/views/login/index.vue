@@ -2,11 +2,17 @@
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <h3 class="title">Merchant - admin</h3>
+      <!-- <img src="@/assets/images/logo.jpg" class="logo"> -->
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input v-model="loginForm.username" name="username" type="text" maxlength="11" auto-complete="on" placeholder="Username" />
+        <el-input v-model="loginForm.username" name="username" type="text" maxlength="11" auto-complete="on" placeholder="Username" class="input-with-select login-input"/>
+        <span>
+          <el-select v-model="loginForm.areaCode" slot="prepend" :placeholder="$t('order.code')" style="width:85px;text-align:right;" class="select-code">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"/>
+          </el-select>
+        </span>
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
@@ -23,18 +29,18 @@
           <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-      <!-- <el-form-item prop="code">
+      <el-form-item prop="code">
         <div class="code">
           <div style="width: 75%">
             <span class="svg-container">
               <svg-icon icon-class="code" />
             </span>
-            <el-input v-model="loginForm.code" name="code" maxlength="11" auto-complete="on" placeholder="Verification code" >
+            <el-input v-model="loginForm.authcode" name="authcode" maxlength="11" auto-complete="on" placeholder="Verification code" >
             </el-input>
           </div>
           <img :src="codeUrl" @click="refreshCode" />
         </div>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item>
         <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
           Login
@@ -45,7 +51,7 @@
 </template>
 
 <script>
-import codeAuth from '~/config/code'  //加载语言配置文件
+import codeSlect from '~/config/code'  //加载语言配置文件
 
 export default {
   name: 'Login',
@@ -72,15 +78,17 @@ export default {
       }
     }
     return {
+      options: codeSlect.code,
       loginForm: {
         username: '',
-        password: ''
-        //code: ''
+        password: '',
+        areaCode: '86',
+        authcode: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
-        //code: [{ required: true, trigger: 'blur', validator: validateCode }]
+        password: [{ required: true, trigger: 'blur', validator: validatePass }],
+        authcode: [{ required: true, trigger: 'blur', validator: validateCode }]
       },
       loading: false,
       pwdType: 'password',
@@ -168,6 +176,16 @@ $light_gray:#eee;
     border-radius: 5px;
     color: #454545;
   }
+  .select-code .el-input {
+    width:100%
+  }
+  .logo {
+    display: block;
+    width: 200px;
+    height: 150px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
 }
 
 .code {
@@ -178,8 +196,7 @@ $light_gray:#eee;
 
   img {
     height: 45px;
-    margin-right: 10px;
-    border-radius: 5px;
+    border-radius: 0 5px 5px 0;
   }
 }
 </style>
@@ -236,5 +253,9 @@ $light_gray:#eee;
     cursor: pointer;
     user-select: none;
   }
+  .login-input {
+    width:72%
+   }
 }
+
 </style>

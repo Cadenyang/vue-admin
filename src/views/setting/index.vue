@@ -31,28 +31,49 @@
       </el-col>
 
       <el-col :span="12" style="height: 55%; display: flex; flex-direction: column; justify-content: space-between">
-        <el-card class="box-card" style="height: 40%">
+        <el-card class="box-card" style="height: 60%">
           <div class="title">
-            <span>{{ $t('setting.merchant_key') }}</span>
-          </div>
-          <div class="config-item" >
-            <el-input 
-              :type="key"
-              v-model="userKey"
-              name="appsecrect"
-              :disabled="true" style="margin-top:30px;width:70%" >
-            </el-input>  
-            <span class="show-pwd" @click="showAppsecrect" >
+            <span>{{ $t('setting.security') }}</span>
+            <span class="toggle-info" @click="toggleSecurityInfo" >
               <svg-icon :icon-class="appsecrect === 1 ? 'eye-open' : 'eye'" />
             </span>
-            <el-button type="primary" style="margin-left:5%"
-              v-clipboard:copy="userKey"
-              v-clipboard:success="onCopy"
-              v-clipboard:error="onError">{{ $t('setting.copy') }}
-            </el-button>
           </div>
+          <!-- APPID -->
+          <el-row class="config-item" :gutter="15">
+            <el-col :span="6">
+              <span class="name">APPID</span>
+            </el-col>
+            <ElCol :span="14">
+              <el-input :type="key" v-model="appId" name="appId" :disabled="true"></el-input>
+            </ElCol>
+            <ElCol :span="4">
+              <el-button type="primary"
+                class="config-btn"
+                v-clipboard:copy="appId"
+                v-clipboard:success="onCopy"
+                v-clipboard:error="onError">{{ $t('setting.copy') }}
+              </el-button>
+            </ElCol>
+          </el-row>
+          <!-- 密钥 -->
+          <el-row class="config-item" :gutter="15">
+            <el-col :span="6">
+              <span class="name">{{ $t('setting.merchant_key') }}</span>
+            </el-col>
+            <ElCol :span="14">
+            <el-input :type="key" v-model="userKey" name="appsecrect" :disabled="true"></el-input>  
+            </ElCol>
+            <ElCol :span="4">
+              <el-button type="primary"
+                class="config-btn"
+                v-clipboard:copy="userKey"
+                v-clipboard:success="onCopy"
+                v-clipboard:error="onError">{{ $t('setting.copy') }}
+              </el-button>
+            </ElCol>
+          </el-row>
         </el-card>
-        <el-card class="box-card" style="height: 58%">
+        <el-card class="box-card" style="height: 38%">
           <div class="title">
             <span>{{ $t('setting.switch') }}</span>
           </div>
@@ -65,18 +86,49 @@
                   <el-switch class="sell-buy" v-model="switchs.buy"></el-switch>
                 </el-form-item> -->
                 <el-form-item :label="$t('route.Commodity_Sale')">
-                  <el-switch  v-if="language==='zh-CN'" style="margin-left:60px" v-model="switchs.sale"></el-switch>
-                  <el-switch  v-if="language==='en-US'" style="margin-left:12px" v-model="switchs.sale"></el-switch>
+                  <el-switch
+                    v-if="language==='zh-CN'" :disabled="loading"
+                    style="margin-left:60px"
+                    v-model="switchs.sale"
+                    :active-value="1"
+                    :inactive-value="2"
+                    @change="tradeSwitch"></el-switch>
+                  <el-switch
+                    v-if="language==='en-US'" :disabled="loading"
+                    style="margin-left:12px"
+                    v-model="switchs.sale"
+                    :active-value="1"
+                    :inactive-value="2"
+                    @change="tradeSwitch"></el-switch>
                 </el-form-item>
               </el-form>
           </div>
         </el-card>
       </el-col>
     </el-row>
+    <!-- 手机验证码 -->
+    <el-dialog :visible.sync="showDialog" width="30%" center>
+      <div style="padding-bottom: 20px;">{{ $t('setting.tip') }}</div>
+      <el-form :model="dialogForm" ref="dialogForm" :rules="dialogRules">
+        <el-form-item prop="authCode">
+          <el-input :placeholder="$t('setting.code')" class="input-with-select" v-model="dialogForm.authCode">
+            <template slot="append">
+              <el-button @click="sendMsg" style="background-color:#fff;width:70px;">{{sendText}}</el-button>
+            </template>
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showDialog = false">{{ $t('setting.cancel') }}</el-button>
+        <el-button type="primary" @click="confirmAuthCode">{{ $t('setting.confirm') }}</el-button>
+      </span>
+    </el-dialog>
+
   </div>  
 </template>
 <script>
 import api from '@/api/user'
+import set_api from '@/api/setting'
 
 var _this = null
 export default {
@@ -84,15 +136,16 @@ export default {
   data(){
     return {
       switchs: {
-        sell: false,
-        buy: false,
-        sale: false
+        // sell: false,
+        // buy: false,
+        sale: ''
       },
       areaCode: '',
       phone: '',
       userKey: '',
-      key: '', 
+      key: '',
       appsecrect: '',
+      appId: '',
       sending: false,
       msgColdDown: true,
       msgColdCount: 60,
@@ -105,7 +158,12 @@ export default {
         newPwd: '',
         pwdComfirm: '',
         code: ''
-      }
+      },
+      showDialog: false,
+      dialogForm: {
+        authCode: ''
+      },
+      loading: false
     }
   },
   computed: {
@@ -117,6 +175,14 @@ export default {
         return this.$t('setting.send')
       }
       return this.msgColdCount + 's'
+    },
+    dialogRules () {
+      let rules = {
+        authCode: [
+          {required: true, message: this.$t('setting.message'), trigger: 'blur'}
+        ]
+      }
+      return rules
     }
   },
   created() {
@@ -130,18 +196,48 @@ export default {
         if(response.data.areaCode){
             this.areaCode = response.data.areaCode
         }
+        this.switchs.sale = response.data.status - 0
         this.phone = response.data.phone
         this.userKey = response.data.appsecrect
+        this.appId = response.data.appid
       })
-    },  
-    showAppsecrect() { 
+    },
+    // 显示/隐藏安全码
+    toggleSecurityInfo() { 
       if (this.key == 'password') {
-        this.key = 'key'
-        this.appsecrect = 1
+        this.showDialog = true
+        this.$nextTick(() => {
+          this.$refs.dialogForm.resetFields()
+        })
       } else {
         this.appsecrect = 0
         this.key = 'password'
       }
+    },
+    // 提交手机验证码
+    confirmAuthCode () {
+      this.$refs.dialogForm.validate(valid => {
+        if (valid) {
+          const data = {code: this.dialogForm.authCode}
+          api.matchPhoneAuthCode(data).then(res => {
+            if (res.success) {
+              this.key = 'key'
+              this.appsecrect = 1
+              this.showDialog = false
+            } else {
+              this.$message.error({
+                message: res.msg,
+                duration: 2000,
+                onClose: () => {
+                  this.showDialog = false
+                }
+              })
+            }
+          })
+        } else {
+          return false
+        }
+      })
     },
     onCopy: function (e) {
       this.$message({
@@ -195,6 +291,20 @@ export default {
           loadData()
         }
       })
+    },
+    // 改变商品出售开关
+    tradeSwitch () {
+      if (!this.loading) {
+        this.loading = true
+        set_api.tradeSwitch({
+          status: this.switchs.sale * 1
+        }).then(res => {
+          this.loadData()
+        })
+        this.loading = false
+      } else {
+        return false
+      }
     }
   }
 }
@@ -216,17 +326,26 @@ export default {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-.config-item{
-  min-height: 100px;
+.config-item {
+  margin: 20px 0;
 }
-.show-pwd {
-    position: relative;
-    left: 10px;
-    top: 1px;
-    font-size: 16px;
-    cursor: pointer;
-    user-select: none;
-  }
+.config-item .name {
+  padding-left: 10px;
+  line-height: 36px;
+  font-size: 14px;
+  color: #333;
+}
+.config-item .config-btn {
+  display: block;
+  width: 100%;
+}
+.toggle-info {
+  padding: 0 10px;
+  float: right;
+  font-size: 16px;
+  cursor: pointer;
+  user-select: none;
+}
 .sell-buy {
   margin-left: 50px;
 }

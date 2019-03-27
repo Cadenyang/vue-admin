@@ -41,12 +41,12 @@
       </el-table-column>
       <el-table-column :label="$t('order.start_time')" align="center">
         <template slot-scope="scope">
-          {{ scope.row.ctime }}
+          {{ scope.row.ctime | timeZone }}
         </template>Interest date
       </el-table-column>
       <el-table-column :label="$t('order.end_time')" align="center">
         <template slot-scope="scope" v-if="scope.row.status != 1 && scope.row.status != 2 && scope.row.status != 6 ">
-          {{ scope.row.utime }}
+          {{ scope.row.utime | timeZone }}
         </template>
       </el-table-column>    
     </el-table>
@@ -106,7 +106,7 @@ export default {
         create_end_time: '',
         finish_start_time: '',
         finish_end_time: '',
-        order_status: '-1',
+        order_status: '',
         page: 1,
         pageSize: 20
       }

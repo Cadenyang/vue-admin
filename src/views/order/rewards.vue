@@ -86,12 +86,12 @@
       </el-table-column>
       <el-table-column :label="$t('order.start_time')" align="center">
         <template slot-scope="scope">
-          {{ scope.row.ctime }}
+          {{ scope.row.ctime | timeZone }}
         </template>
       </el-table-column>
       <el-table-column :label="$t('order.end_time')" align="center">
         <template slot-scope="scope" v-if="scope.row.status != 1 && scope.row.status != 2 && scope.row.status != 6 ">
-          {{ scope.row.utime }}
+          {{ scope.row.utime | timeZone }}
         </template>
       </el-table-column>    
     </el-table>
@@ -170,7 +170,7 @@ export default {
         create_end_time: '',
         finish_start_time: '',
         finish_end_time: '',
-        order_status: '-1',
+        order_status: '',
         page: 1,
         pageSize: 20
       }
@@ -181,6 +181,19 @@ export default {
     this.loadData()
   },
   methods: {
+    // 将字符串转换为首字母大写的形式
+    firstUpperCase (str) {
+      if (str && str.length) {
+        let first = str.charAt(0).toUpperCase()
+        let others = []
+        for (const i of str.slice(1)) {
+          others.push(i.toLowerCase())
+        }
+        return first + others.join('')
+      } else {
+        return ''
+      }
+    },
     loadData() {
       this.listLoading = true
       for (let item in this.listQuery) {
@@ -191,6 +204,9 @@ export default {
       getRewardList(this.listQuery).then(response => {
         if(response.data && response.code == '100010'){
           this.list = response.data.list
+          for (const item of this.list) {
+            item.tag = this.firstUpperCase(item.tag)
+          }
           this.total = response.data.total
         }else{
           this.list  = response.data

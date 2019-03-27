@@ -17,9 +17,14 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 import VueClipboard from '../node_modules/vue-clipboard2'
+import filters from '@/utils/filters'
+
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
 
 Vue.use(VueClipboard)
-Vue.prototype.$codeURL = 'http://merchant.topockettest.com'
+Vue.prototype.$codeURL = 'http://merchant-admin.topockettest.com/api'
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
